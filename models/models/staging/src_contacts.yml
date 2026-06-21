@@ -1,0 +1,5 @@
+sources:
+  - name: raw_data
+    database: default # or your specific database name
+    tables:
+      - name: stg_contacts

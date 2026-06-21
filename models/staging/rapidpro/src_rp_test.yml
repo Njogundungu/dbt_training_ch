@@ -1,0 +1,65 @@
+sources:
+  - name: rp_test
+    database: default
+    schema: default
+    description: "Raw data from RapidPro containing active healthcare worker metrics"
+
+    tables:
+      # 1. HCW_Database
+      - name: HCW_Database
+        description: "Vital healthcare worker raw database records"
+        columns:
+          - name: hcw_id
+            description: "Unique identifier for the health worker"
+          - name: facility_code
+            description: "Associated unique facility code"
+
+      # 2. Facilities Table 
+      - name: facilities
+        description: "Master registry list of health facilities"
+        columns:
+          - name: id
+            description: "Unique facility code"
+          - name: name
+            description: "Official name of the health facility"
+          - name: county
+            description: "The county where the facility is located"
+          - name: sub_county
+            description: "The sub-county division for the facility"
+            
+      # 3. Assignments Table (Singular to match your ClickHouse engine)
+      - name: hcw_facility_assignments
+        description: "Tracks which healthcare workers are assigned to which facilities"
+        freshness:
+          warn_after: {count: 3650, period: day}
+          error_after: {count: 5475, period: day}
+        loaded_at_field: "toDateTime(valid_from)"
+        columns:
+          - name: id
+          - name: code
+          - name: hcw_id
+          - name: facility_id
+          - name: valid_from
+          - name: valid_to
+
+      # 4. Health Care Workers Table
+      - name: health_care_workers
+        description: "Health care workers detailed master identification details"
+        columns:
+          - name: id
+          - name: name
+          - name: role
+          - name: phone_number
+          - name: registration_county
+        
+      # 5. Review Table 
+      - name: review
+        description: "Updated community health worker verification details"
+        columns:
+          - name: chw_id 
+          - name: county
+          - name: chw_name 
+          - name: sub_county
+          - name: facility_id
+          - name: assignment_id
+          - name: facility_name
