@@ -14,8 +14,8 @@ with active_assignments as (
 
 facilities_master as (
     select 
-        id as facility_id,  -- Using a distinctly tracking variable name
-        name as facility_name,
+        facility_id,  -- Matches the alias from your staging file perfectly
+        facility_name, -- Matches the alias from your staging file perfectly
         county,
         sub_county
     from {{ ref('stg_facilities') }}
