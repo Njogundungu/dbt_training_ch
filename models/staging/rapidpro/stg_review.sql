@@ -1,10 +1,6 @@
-{{ config(
-    materialized='incremental',
-    unique_key='assignment_id',
-    engine='MergeTree',
-    order_by='assignment_id',
-    settings={'allow_nullable_key': 1}
-) }}
+with raw_reviews as (
+    select * from {{ source('rp_test', 'review') }}
+)
 
 select
     assignment_id,
@@ -14,9 +10,8 @@ select
     facility_name,
     county,
     sub_county,
+    
+    -- Keeps track of exactly when this row was processed
     now() as dbt_updated_at
-from {{ source('rp_test', 'review') }}
 
-{% if is_incremental() %}
-  where dbt_updated_at > (select max(dbt_updated_at) from {{ this }})
-{% endif %}
+from raw_reviews

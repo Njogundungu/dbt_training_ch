@@ -1,9 +1,12 @@
--- models/staging/rapidpro/stg_facilities.sql
 {{ config(materialized='view') }}
 
-SELECT
-    id AS facility_id,
-    name AS facility_name,
+with raw_facilities as (
+    select * from {{ source('rp_test', 'facilities') }}
+)
+
+select
+    id as facility_id,
+    name as facility_name,
     county,
     sub_county
-FROM {{ source('rp_test', 'facilities') }}
+from raw_facilities

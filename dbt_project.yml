@@ -1,41 +1,28 @@
-# Name your project! Project names should contain only lowercase characters
-# and underscores. A good package name should reflect your organization's
-# name or the intended use of these models
 name: 'dbt_training_ch'
 version: '1.0.0'
-
-# This setting configures which "profile" dbt uses for this project.
 profile: 'dbt_training_ch'
 
-# These configurations specify where dbt should look for different types of files.
+# Paths telling dbt where to find your files
 model-paths: ["models"]
-analysis-paths: ["analyses"]
+macro-paths: ["macros"]
 test-paths: ["tests"]
 seed-paths: ["seeds"]
-macro-paths: ["macros"]
-snapshot-paths: ["snapshots"]
 
-clean-targets:         # directories to be removed by `dbt clean`
+# Folder cleanup configurations
+clean-targets:
   - "target"
   - "dbt_packages"
 
-# Configuring models
-# Full documentation: https://docs.getdbt.com/docs/configuring-models
+# Table build instructions
 models:
   dbt_training_ch:
-    +materialized: view   # Default for intermediate/marts models if not specified
+    +materialized: view      # Default rule: build everything as a view first
     
     staging:
-      rapidpro:
-        +materialized: table  # Builds staging files as physical tables
-
-    intermediate:
-      +materialized: view   # Explicitly forces intermediate folder to build views
-
+      +materialized: table   # Exception 1: Build staging files as physical tables
     marts:
-      +materialized: table  # Explicitly forces marts folder to build physical tables
+      +materialized: table   # Exception 2: Build final marts as physical tables
 
-# Configuring tests to save results directly into ClickHouse tables
+# Data quality log instructions
 tests:
-  dbt_training_ch:
-    +store_failures: true   # Automatically creates physical tables for test results/failures
+  +store_failures: true      # Automatically saves test records directly into ClickHouse

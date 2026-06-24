@@ -1,0 +1,30 @@
+models:
+  - name: stg_facilities
+    description: "Master lookup list of healthcare facilities."
+    columns:
+      - name: facility_id
+        data_tests:
+          - unique
+          - not_null
+
+  - name: stg_hcw_assignments
+    description: "Tracks active and past health care worker assignments."
+    columns:
+      - name: id
+        data_tests:
+          - unique
+          - not_null
+      - name: hcw_id
+        data_tests:
+          - not_null
+      - name: facility_id
+        data_tests:
+          - not_null
+
+  - name: stg_review
+    description: "Feedback and review metrics submitted by health care workers."
+    columns:
+      - name: assignment_id
+        data_tests:
+          - unique
+          - not_null
