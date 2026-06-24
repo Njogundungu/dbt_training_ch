@@ -3,6 +3,7 @@ models:
     description: "Master lookup list of healthcare facilities."
     columns:
       - name: facility_id
+        description: "The primary key uniquely identifying each facility."
         data_tests:
           - unique
           - not_null
@@ -11,13 +12,16 @@ models:
     description: "Tracks active and past health care worker assignments."
     columns:
       - name: id
+        description: "Surrogate key uniquely identifying each assignment row."
         data_tests:
           - unique
           - not_null
       - name: hcw_id
+        description: "Unique identifier for the health care worker."
         data_tests:
           - not_null
       - name: facility_id
+        description: "Foreign key linking to the stg_facilities model."
         data_tests:
           - not_null
 
@@ -25,6 +29,7 @@ models:
     description: "Feedback and review metrics submitted by health care workers."
     columns:
       - name: assignment_id
+        description: "The unique identifier linking the review back to a specific worker assignment."
         data_tests:
           - unique
           - not_null
